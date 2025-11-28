@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+   <style>
+               /* ====== Navbar Link Styles ====== */
+        .navbar-nav .nav-link {
+            color: #524c4c;
+            padding: 8px 15px;
+            border-top: 1px solid #c0baba;
+            border-bottom: 1px solid #c0baba;
+            text-transform: uppercase;
+            font-family: "Poppins", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #cc0000;
+            border-top: 1px solid #cc0000;
+            border-bottom: 1px solid #cc0000;
+        }
+
+        /* ====== Navbar Container ====== */
+        .navbar {
+            margin: 0px;
+            overflow: visible;
+            transition: all 0.4s ease;
+            background-color: white;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+            border-bottom: 1px solid#e4dddd;
+
+        }
+
+        .navbar-collapse {
+            overflow: visible;
+        }
+
+        .navbar:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ====== Dropdown Menu (Hover Style) ====== */
+        .dropdown-menu {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 0;
+            display: outside;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .nav-item:hover>.dropdown-menu {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            color: #665f5f;
+            text-transform: capitalize;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            color: #cc0000;
+            background-color: #f9f9f9;
+        }
+
+       
+        /* ===== Navbar Icons ===== */
+        .navbar-icons i {
+            font-size: 16px;
+            margin-left: 20px;
+            color: #070707;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-icons i:hover {
+            color: #cc0000;
+            transform: scale(1.2);
+        }
+
+
+
+        /* ====== Search ====== */
+
+        .search-bar-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .search-bar-wrapper.active {
+            max-height: 80px;
+            opacity: 1;
+            padding-bottom: 15px;
+        }
+
+        .search-bar {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            padding: 6px 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+
+        .search-bar button {
+            background: none;
+            border: none;
+            color: #665f5f;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 5;
+        }
+
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== Custom Black Animated Toggler ===== */
+        .custom-toggler {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 50px;
+            height: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: relative;
+            z-index: 2000;
+        }
+
+        .toggler-icon {
+            width: 100%;
+            height: 3px;
+            background-color: #000;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-toggler[aria-expanded="true"] .top-bar {
+            transform: rotate(45deg);
+            position: relative;
+            top: 5px;
+        }
+
+        .custom-toggler[aria-expanded="true"] .middle-bar {
+            opacity: 0;
+        }
+
+        .custom-toggler[aria-expanded="true"] .bottom-bar {
+            transform: rotate(-45deg);
+            position: relative;
+            top: -9px;
+        }
+
+        .custom-toggler:hover .toggler-icon {
+            background-color: #cc0000;
+        }
+  
+        /* ===== Page ===== */
+        body {
+            background-color: white;
+            font-family: 'Poppins', sans-serif;
+            color: #6c757d;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .product-section {
+            padding: 50px 300px;
+        }
+
+        .product-image {
+            width: 100%;
+
+        }
+
+        .product-title {
+            font-size: 27px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: rgb(22, 22, 22);
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+        }
+
+        .price {
+            color: rgb(22, 22, 22);
+            font-size: 24px;
+            font-weight: 530;
+            margin-bottom: 20px;
+        }
+
+        .size-selector button {
+            margin-right: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .size-selector button.active {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .size-selector button:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .quantity-selector {
+            width: 130px;
+        }
+
+        .note-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Buttons */
+        .btn-cart,
+        .btn-buy {
+            border: 1px solid #212529;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cart {
+            background-color: transparent;
+            color: #212529;
+        }
+
+        .btn-cart:hover {
+            background-color: #212529;
+            color: #fff;
+        }
+
+        .btn-buy {
+            background-color: #212529;
+            color: #fff;
+        }
+
+        .btn-buy:hover {
+            background-color: #c16452;
+            color: #212529;
+        }
+
+        /* Custom CSS to change the icon color to black */
+        .bi {
+            color: black;
+        }
+
+        @media (max-width: 768px) {
+            .product-section {
+                padding: 40px 20px;
+            }
+        }
+
+        /* =======================
+       CUSTOM DIALOG BOX
+    ======================== */
+
+
+        #cartDialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        #cartDialog .box {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #cartDialog p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #cartDialog button {
+            padding: 8px 25px;
+            border: none;
+            background: #212529;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        #cartDialog button:hover {
+            background: #585858;
+        }
+          /* ===== FOOTER BASE ===== */
+          .footer {
+            padding: 60px 5%;
+            background-color: #f0f0f0;
+            color: #b6b5b5;
+            border-top: 1px solid #e6e0e0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== ICON ROW ===== */
+        .footer-icons {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 100px;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .footer-icons .icon-box {
+            flex: 1 1 200px;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .footer-icons .icon-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .footer-icons i {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #cc0000;
+        }
+
+        .footer-icons p {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* ===== MAIN FOOTER CONTENT ===== */
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        /* ===== ABOUT ===== */
+        .about {
+            flex: 1 1 250px;
+            margin-bottom: 30px;
+        }
+
+        .about h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #222;
+            font-size: 28px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .about p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* ===== SOCIAL MEDIA ICONS ===== */
+        .footer-social {
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #555;
+            font-size: 18px;
+            width: 38px;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background-color: #cc0000;
+            color: #fff;
+            transform: scale(1.1);
+            border-color: #cc0000;
+        }
+
+        /* ===== STORE POLICIES ===== */
+        .store-policies {
+            flex: 1 1 200px;
+        }
+
+        .store-policies h4,
+        .newsletter h4 {
+            font-size: 17px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #222;
+            letter-spacing: 0.5px;
+        }
+
+        .store-policies ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .store-policies li {
+            margin-bottom: 10px;
+        }
+
+        .store-policies a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .store-policies a:hover {
+            color: #cc0000;
+            padding-left: 5px;
+        }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter {
+            flex: 1 1 250px;
+        }
+
+        .newsletter p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .newsletter form {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .newsletter input {
+            padding: 12px;
+            width: 70%;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .newsletter input:focus {
+            border-color: #cc0000;
+        }
+
+        .newsletter button {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            background: #cc0000;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter button:hover {
+            background-color: #fff;
+            color: #cc0000;
+            border: 1px solid #cc0000;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .footer-main {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-icons .icon-box {
+                flex: 1 1 45%;
+            }
+
+            .footer-main {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-icons .icon-box {
+                flex: 1 1 100%;
+            }
+
+            .newsletter form {
+                flex-direction: column;
+            }
+
+            .newsletter input,
+            .newsletter button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+   <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="M (3).png" alt="Logo" width="250px" height="180px"
+                    style="background-color: rgb(111, 199, 199);">
+            </a>
+
+            <!-- Toggler -->
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="toggler-icon top-bar"></span>
+                <span class="toggler-icon middle-bar"></span>
+                <span class="toggler-icon bottom-bar"></span>
+            </button>
+
+
+            <!-- Nav Links -->
+            <div class="collapse navbar-collapse justify-content-center order-lg-1" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="new arrival.html">New Arrival</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#">Designer & Brands</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="maria.b.html">Maria B</a></li>
+                            <li><a class="dropdown-item" href="noor by sadia asad.html">NOOR by Saadia Asad</a></li>
+                            <li><a class="dropdown-item" href="afrozeh.html">Afrozeh</a></li>
+                            <li><a class="dropdown-item" href="paras by pasha.html">Paras By Pasha</a></li>
+                            <li><a class="dropdown-item" href="qalamkar.html">Qalamkar</a></li>
+                            <li><a class="dropdown-item" href="mushq.html">Mushq</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="formal.html">Formals</a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="unstitched.html">Unstitched</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="luxury.html">Luxury Pret</a>
+                    </li>
+
+                   
+                </ul>
+            </div>
+
+            <!-- Icons -->
+            <div class="navbar-icons order-lg-2 d-flex align-items-center">
+                <i class="fa fa-search" id="search-icon"></i>
+                <div class="position-relative ms-3">
+                    <a href="cart.html">
+                        <i class="fa fa-shopping-bag" id="cartIcon" style="cursor:pointer;"></i>
+                        <span id="cartCount"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                            0
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar-wrapper" id="search-bar-wrapper">
+            <div class="search-bar">
+                <input type="text" placeholder="Search for products...">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    <div class="search-overlay" id="search-overlay"></div>
+    <!-- product page / -->
+
+    <div class="container-fluid product-section row">
+
+        <div class="col-md-6 text-center">
+            <img src="LUX8 PARAS.JPG" class="product-image" alt="Product Image">
+        </div>
+
+        <div class="col-md-6">
+            <h3 class="product-title">PR108 : Skyline</h3>
+            <p class="price">Rs.16,500.00 PKR
+            </p>
+
+            <div class="mt-3">
+                <label class="form-label fw-bold">Size</label>
+                <div class="size-selector">
+                    <button class="btn btn-outline-dark btn-sm active">S</button>
+                    <button class="btn btn-outline-dark btn-sm">M</button>
+                    <button class="btn btn-outline-dark btn-sm">L</button>
+                    <button class="btn btn-outline-dark btn-sm">XL</button>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="form-label fw-bold">Quantity</label>
+                <div class="input-group quantity-selector">
+                    <button class="btn btn-outline-secondary" id="minus">-</button>
+                    <input type="text" class="form-control text-center" id="quantity" value="1">
+                    <button class="btn btn-outline-secondary" id="plus">+</button>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex flex-column gap-3">
+                <button class="btn btn-cart"
+                id="addToCart"
+                data-id="PR108"
+                data-name="PR108 : Skyline"
+                data-price="16500"
+                data-image="LUX8 PARAS.JPG">
+            Add to Cart
+        </button>
+        
+                <button class="btn btn-buy" id="buyNow">Buy It Now</button>
+            </div>
+
+            <div class="mt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"> <strong>Description:</strong></h6>
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#description"
+                        aria-expanded="false" aria-controls="description">
+                        <i class="bi bi-chevron-down" id="toggle-icon"></i>
+                    </button>
+                </div>
+
+                <div id="description" class="collapse">
+                    <ul class="list-unstyled mt-3">
+
+                        <ul>
+                           <li> Embroidered front on chiffon</li>
+                           <li> Embroidered and hand embellished neckline on organza</li>
+                            <li> Embroidered Front border and back border on organza</li>
+                            <li> Chiffon fabric for back</li>
+                            <li> Embroidered sleeves on chiffon</li>
+                            <li> Embroidered sleeves border on organza</li>
+                            <li> Embroidered chiffon duppata 2.5 yard</li>
+                            <li> Embroidered duppata pallu border on organza</li>
+                            <li> Pk raw silk 2.5 Metres</li>
+                        </ul>
+                </div>
+            </div><br>
+
+
+
+            <div class="border p-4 position-relative">
+
+                <!-- Heading -->
+                <h6 class="text-center text-muted fw-semibold small mb-0" style="letter-spacing:3px; color: black;">
+                    DISCLAIMER
+                </h6>
+
+                <!-- Toggle Button -->
+                <button class="btn p-0 position-absolute top-50 translate-middle-y end-0 me-3" data-bs-toggle="collapse"
+                    data-bs-target="#disclaimerBox" aria-expanded="false" style="box-shadow:none;">
+                    <i id="chevIcon" class="bi bi-chevron-down"></i>
+                </button>
+
+                <!-- Collapsible Content -->
+                <div class="collapse" id="disclaimerBox">
+                    <p class="text-secondary mt-3 mb-1">
+                        Product color may slightly vary due to photographic lighting sources or your monitor settings.
+                    </p>
+                    <p class="text-secondary mb-1">
+                        Stitched orders cannot be processed through Cash on Delivery.
+                    </p>
+                    <p class="text-secondary mb-0">
+                        To maintain the quality of this product, please dry clean only. Do not wash.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===============================
+       CUSTOM DIALOG BOX
+  ================================ -->
+    <div id="cartDialog">
+        <div class="box">
+            <p>Item added to cart successfully!</p>
+            <button id="closeDialog">OK</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+ <script>
+   
+    /* ===== Quantity ===== */
+    const minus = document.getElementById('minus');
+    const plus = document.getElementById('plus');
+    const qty = document.getElementById('quantity');
+
+    minus.addEventListener('click', () => {
+        let value = parseInt(qty.value);
+        if (value > 1) qty.value = value - 1;
+    });
+
+    plus.addEventListener('click', () => {
+        let value = parseInt(qty.value);
+        qty.value = value + 1;
+    });
+
+    /* ===== Size Selector ===== */
+    const sizeButtons = document.querySelectorAll('.size-selector button');
+    sizeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sizeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
+    function addItemToCart() {
+
+const selectedSize = document.querySelector('.size-selector button.active')?.textContent;
+if (!selectedSize) {
+    alert('Please select a size!');
+    return;
+}
+
+const btn = document.getElementById("addToCart");
+
+const product = {
+    id: btn.dataset.id,
+    name: btn.dataset.name,
+    price: Number(btn.dataset.price),
+    size: selectedSize,
+    quantity: parseInt(qty.value),
+    image: btn.dataset.image
+};
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+const existingIndex = cart.findIndex(item =>
+    item.id === product.id && item.size === product.size
+);
+
+if (existingIndex !== -1) {
+    cart[existingIndex].quantity += product.quantity;
+} else {
+    cart.push(product);
+}
+
+localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+
+
+    /* ===== Show custom dialog & update cart count ===== */
+    document.getElementById('addToCart').addEventListener('click', () => {
+        addItemToCart();
+        updateCartCount();
+        document.getElementById('cartDialog').style.display = 'flex';
+    });
+
+    /* ===== Close Dialog ===== */
+    document.getElementById('closeDialog').addEventListener('click', () => {
+        document.getElementById('cartDialog').style.display = 'none';
+    });
+
+    /* ===== Buy Now -> Add to cart and go to cart page ===== */
+    document.getElementById('buyNow').addEventListener('click', () => {
+        addItemToCart();
+        updateCartCount();
+        window.location.href = 'cart.html';
+    });
+
+  
+    /* ===== Disclaimer toggle ===== */
+    let disclaimer = document.getElementById('disclaimerBox');
+    let icon = document.getElementById('chevIcon');
+
+    disclaimer.addEventListener('show.bs.collapse', function () {
+        icon.classList.remove("bi-chevron-down");
+        icon.classList.add("bi-chevron-up");
+    });
+
+    disclaimer.addEventListener('hide.bs.collapse', function () {
+        icon.classList.remove("bi-chevron-up");
+        icon.classList.add("bi-chevron-down");
+    });
+
+    /* ===== Product description toggle icon ===== */
+    var collapseElement = document.getElementById('description');
+    collapseElement.addEventListener('shown.bs.collapse', function () {
+        document.getElementById('toggle-icon').classList.remove('bi-chevron-down');
+        document.getElementById('toggle-icon').classList.add('bi-chevron-up');
+    });
+    collapseElement.addEventListener('hidden.bs.collapse', function () {
+        document.getElementById('toggle-icon').classList.remove('bi-chevron-up');
+        document.getElementById('toggle-icon').classList.add('bi-chevron-down');
+    });
+</script> 
+   <script>
+        const searchIcon = document.getElementById('search-icon');
+        const searchWrapper = document.getElementById('search-bar-wrapper');
+        const searchOverlay = document.getElementById('search-overlay');
+        const searchInput = searchWrapper.querySelector('input');
+
+        searchIcon.addEventListener('click', () => {
+            searchWrapper.classList.toggle('active');
+            searchOverlay.classList.toggle('active');
+
+            if (searchWrapper.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.blur();
+            }
+        });
+
+        searchOverlay.addEventListener('click', () => {
+            searchWrapper.classList.remove('active');
+            searchOverlay.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchWrapper.classList.remove('active');
+                searchOverlay.classList.remove('active');
+            }
+        });
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cartCount');
+
+    const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+    if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.style.display = "inline-block"; // show badge
+    } else {
+        cartCount.style.display = "none"; // hide badge when cart is empty
+    }
+}
+
+updateCartCount();
+
+    </script>
+    
+    
+    <footer class="footer">
+
+        <!-- Top Icons Row -->
+        <div class="footer-icons">
+            <div class="icon-box">
+                <i class="bi bi-gift"></i>
+                <p>WORLDWIDE DELIVERY</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-arrow-repeat"></i>
+                <p>READ OUR RETURN & EXCHANGE POLICY</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-headset"></i>
+                <p>TOP-NOTCH SUPPORT</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-shield-lock"></i>
+                <p>SECURE PAYMENTS</p>
+            </div>
+        </div>
+
+
+        <div class="footer-main">
+
+            <!-- About Section -->
+            <div class="about">
+                <h3>About Us</h3>
+                <p>
+                    Madam Boutique is a modern fashion destination where elegance meets quality.
+                    We focus on premium fabrics, refined designs, and impeccable craftsmanship—because
+                    you deserve nothing less than perfection.
+                </p>
+                <!-- Social Media Icons -->
+                <div class="footer-social">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+
+            <!-- Store Policies -->
+            <div class="store-policies">
+                <h4>STORE POLICIES</h4>
+                <ul>
+                    <li><a href="aboutus.html">About us</a></li>
+                    <li><a href="contact_page_exact.html">Contact us</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return & Exchange</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="newsletter">
+                <h4>NEWSLETTER</h4>
+                <p>Subscribe to receive updates, access to exclusive deals, and more.</p>
+
+                <form>
+                    <input type="email" placeholder="E-mail" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+
+        </div>
+
+    </footer>
+       
+
+</body>
+
+</html>

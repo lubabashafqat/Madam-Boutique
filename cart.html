@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* ====== Navbar Link Styles ====== */
+        .navbar-nav .nav-link {
+            color: #524c4c;
+            padding: 8px 15px;
+            border-top: 1px solid #c0baba;
+            border-bottom: 1px solid #c0baba;
+            text-transform: uppercase;
+            font-family: "Poppins", sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-item {
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #cc0000;
+            border-top: 1px solid #cc0000;
+            border-bottom: 1px solid #cc0000;
+        }
+
+        /* ====== Navbar Container ====== */
+        .navbar {
+            margin: 0px;
+            overflow: visible;
+            transition: all 0.4s ease;
+            background-color: white;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap; 
+           border-bottom: 1px solid#e4dddd;
+
+        }
+
+        .navbar-collapse {
+            overflow: visible;
+        }
+
+        .navbar:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ====== Dropdown Menu (Hover Style) ====== */
+        .dropdown-menu {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 0;
+            display: outside;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .nav-item:hover>.dropdown-menu {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            color: #665f5f;
+            text-transform: capitalize;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            color: #cc0000;
+            background-color: #f9f9f9;
+        }
+
+       
+        /* ===== Navbar Icons ===== */
+        .navbar-icons i {
+            font-size: 16px;
+            margin-left: 20px;
+            color: #070707;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-icons i:hover {
+            color: #cc0000;
+            transform: scale(1.2);
+        }
+
+
+        /* ====== Search ====== */
+
+        .search-bar-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .search-bar-wrapper.active {
+            max-height: 80px;
+            opacity: 1;
+            padding-bottom: 15px;
+        }
+
+        .search-bar {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            padding: 6px 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+
+        .search-bar button {
+            background: none;
+            border: none;
+            color: #665f5f;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 5;
+        }
+
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== Custom Black Animated Toggler ===== */
+        .custom-toggler {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 50px;
+            height: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            position: relative;
+            z-index: 2000;
+        }
+
+        .toggler-icon {
+            width: 100%;
+            height: 3px;
+            background-color: #000;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .custom-toggler[aria-expanded="true"] .top-bar {
+            transform: rotate(45deg);
+            position: relative;
+            top: 5px;
+        }
+
+        .custom-toggler[aria-expanded="true"] .middle-bar {
+            opacity: 0;
+        }
+
+        .custom-toggler[aria-expanded="true"] .bottom-bar {
+            transform: rotate(-45deg);
+            position: relative;
+            top: -9px;
+        }
+
+        .custom-toggler:hover .toggler-icon {
+            background-color: #cc0000;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .cart-title {
+            font-size: 38px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cart-table th {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .qty-btn {
+            width: 34px;
+            height: 34px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+
+        .note-box {
+            height: 110px;
+        }
+
+        #checkout-btn:hover {
+            border: 1px solid #c16452;
+            background-color: #c16452;
+            color: #212529;
+        }
+
+        .note-box:focus {
+            border-color: #000 !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+          /* ===== FOOTER BASE ===== */
+          .footer {
+            padding: 60px 5%;
+            background-color: #f0f0f0;
+            color: #b6b5b5;
+            border-top: 1px solid #e6e0e0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== ICON ROW ===== */
+        .footer-icons {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 100px;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .footer-icons .icon-box {
+            flex: 1 1 200px;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .footer-icons .icon-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .footer-icons i {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #cc0000;
+        }
+
+        .footer-icons p {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* ===== MAIN FOOTER CONTENT ===== */
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        /* ===== ABOUT ===== */
+        .about {
+            flex: 1 1 250px;
+            margin-bottom: 30px;
+        }
+
+        .about h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #222;
+            font-size: 28px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .about p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* ===== SOCIAL MEDIA ICONS ===== */
+        .footer-social {
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #555;
+            font-size: 18px;
+            width: 38px;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background-color: #cc0000;
+            color: #fff;
+            transform: scale(1.1);
+            border-color: #cc0000;
+        }
+
+        /* ===== STORE POLICIES ===== */
+        .store-policies {
+            flex: 1 1 200px;
+        }
+
+        .store-policies h4,
+        .newsletter h4 {
+            font-size: 17px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #222;
+            letter-spacing: 0.5px;
+        }
+
+        .store-policies ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .store-policies li {
+            margin-bottom: 10px;
+        }
+
+        .store-policies a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .store-policies a:hover {
+            color: #cc0000;
+            padding-left: 5px;
+        }
+
+        /* ===== NEWSLETTER ===== */
+        .newsletter {
+            flex: 1 1 250px;
+        }
+
+        .newsletter p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .newsletter form {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .newsletter input {
+            padding: 12px;
+            width: 70%;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .newsletter input:focus {
+            border-color: #cc0000;
+        }
+
+        .newsletter button {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            background: #cc0000;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter button:hover {
+            background-color: #fff;
+            color: #cc0000;
+            border: 1px solid #cc0000;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .footer-main {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-icons .icon-box {
+                flex: 1 1 45%;
+            }
+
+            .footer-main {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-icons .icon-box {
+                flex: 1 1 100%;
+            }
+
+            .newsletter form {
+                flex-direction: column;
+            }
+
+            .newsletter input,
+            .newsletter button {
+                width: 100%;
+            }
+        }
+        /* ============================
+   RESPONSIVE FIXES (NO STYLE CHANGE)
+   ============================ */
+
+/* ---- TABLET (≤ 992px) ---- */
+@media (max-width: 992px) {
+
+    /* Navbar logo */
+    .navbar-brand img {
+        width: 180px !important;
+        height: auto !important;
+    }
+
+    /* Center navbar links on tablet */
+    .navbar-nav .nav-item {
+        margin: 5px 0;
+    }
+
+    /* Search bar width */
+    .search-bar {
+        width: 70% !important;
+    }
+
+    /* Footer spacing shrink */
+    .footer-main {
+        gap: 25px !important;
+    }
+}
+
+/* ---- MOBILE (≤ 768px) ---- */
+@media (max-width: 768px) {
+    
+    /* Fix overflowing dropdowns */
+    .dropdown-menu {
+        position: static !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* Search bar width */
+    .search-bar {
+        width: 85% !important;
+    }
+
+    /* Cart table stack */
+    .cart-table thead {
+        display: none;
+    }
+
+    .cart-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+
+    .cart-table td {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        padding: 8px 0;
+    }
+
+    .item-img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .qty-btn {
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    .cart-title {
+        font-size: 28px !important;
+    }
+
+    /* Footer icons become 2 per row */
+    .footer-icons .icon-box {
+        flex: 1 1 45% !important;
+    }
+
+    /* Footer column stacking */
+    .footer-main {
+        flex-direction: column !important;
+        gap: 30px !important;
+    }
+
+    .newsletter form {
+        flex-direction: column !important;
+    }
+
+    .newsletter input,
+    .newsletter button {
+        width: 100% !important;
+    }
+}
+
+/* ---- SMALL MOBILE (≤ 480px) ---- */
+@media (max-width: 480px) {
+
+    /* Logo size */
+    .navbar-brand img {
+        width: 150px !important;
+    }
+
+    /* Search bar full width */
+    .search-bar {
+        width: 95% !important;
+    }
+
+    .footer-icons .icon-box {
+        flex: 1 1 100% !important;
+    }
+
+    /* Cart text */
+    .cart-table td {
+        font-size: 13px !important;
+    }
+
+    .qty-btn {
+        width: 25px !important;
+        height: 25px !important;
+    }
+
+    .note-box {
+        height: 90px !important;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+           <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="index.html">
+                <img src="M (3).png" alt="Logo" width="250px" height="180px"
+                    style="background-color: rgb(111, 199, 199);">
+            </a>
+
+            <!-- Toggler -->
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="toggler-icon top-bar"></span>
+                <span class="toggler-icon middle-bar"></span>
+                <span class="toggler-icon bottom-bar"></span>
+            </button>
+
+
+            <!-- Nav Links -->
+            <div class="collapse navbar-collapse justify-content-center order-lg-1" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="new arrival.html">New Arrival</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#">Designer & Brands</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="maria.b.html">Maria B</a></li>
+                            <li><a class="dropdown-item" href="noor by sadia asad.html">NOOR by Saadia Asad</a></li>
+                            <li><a class="dropdown-item" href="afrozeh.html">Afrozeh</a></li>
+                            <li><a class="dropdown-item" href="paras by pasha.html">Paras By Pasha</a></li>
+                            <li><a class="dropdown-item" href="qalamkar.html">Qalamkar</a></li>
+                            <li><a class="dropdown-item" href="mushq.html">Mushq</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="formal.html">Formals</a>
+                    </li>
+
+                    <li class="nav-item"><a class="nav-link" href="unstitched.html">Unstitched</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="luxury.html">Luxury Pret</a>
+                    </li>
+
+                  
+                </ul>
+            </div>
+
+            <!-- Icons -->
+            <div class="navbar-icons order-lg-2 d-flex align-items-center">
+                <i class="fa fa-search" id="search-icon"></i>
+                <div class="position-relative ms-3">
+                    <a href="cart.html">
+                        <i class="fa fa-shopping-bag" id="cartIcon" style="cursor:pointer;"></i>
+                        <span id="cartCount"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                            0
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar-wrapper" id="search-bar-wrapper">
+            <div class="search-bar">
+                <input type="text" placeholder="Search for products...">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </nav>
+    <div class="search-overlay" id="search-overlay"></div>
+
+    <div class="container mt-5">
+        <h1 class="cart-title">Shopping cart</h1>
+
+        <table class="table cart-table align-middle">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="cart-body">
+                <!-- Cart items injected here -->
+            </tbody>
+        </table>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <label class="mb-2">Add a note to your order</label>
+                <textarea id="text" class="form-control note-box"></textarea> <br>
+            </div>
+            <div class="col-md-6 text-end">
+                <h4 class="fw-bold">Subtotal: <span id="subtotal">Rs 0</span></h4>
+                <p class="text-muted">Taxes and shipping calculated at checkout</p>
+                <button id="checkout-btn" class="btn btn-dark px-5 py-2">CHECK OUT</button>
+                <div class="mt-2">
+                    <a href="#" class="text-muted small">Continue shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script>
+            // Wait for DOM
+            document.addEventListener('DOMContentLoaded', () => {
+
+                function renderCart() {
+                    const cartBody = document.getElementById('cart-body');
+                    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+                    cartBody.innerHTML = '';
+
+                    cartData.forEach((item, index) => {
+                        const price = item.price || 0; // fallback to 0 if price is null
+                        const total = price * item.quantity;
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+        <td>
+          <div class="d-flex align-items-center gap-3">
+            <img src="${item.image}" class="item-img">
+            <div>
+              <div class="fw-semibold item-name">${item.name}</div>
+              <small>Size: ${item.size}</small><br>
+              <a href="#" class="text-danger small remove-item">Remove ×</a>
+            </div>
+          </div>
+        </td>
+        <td class="item-price">Rs ${price.toLocaleString()}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <button class="qty-btn minus">-</button>
+            <div class="px-3 qty">${item.quantity}</div>
+            <button class="qty-btn plus">+</button>
+          </div>
+        </td>
+        <td class="item-total">Rs ${total.toLocaleString()}</td>
+      `;
+                        cartBody.appendChild(row);
+
+                        const minusBtn = row.querySelector('.minus');
+                        const plusBtn = row.querySelector('.plus');
+                        const qtyBox = row.querySelector('.qty');
+                        const removeBtn = row.querySelector('.remove-item');
+
+                        // Quantity buttons
+                        minusBtn.addEventListener('click', () => {
+                            if (item.quantity > 1) item.quantity--;
+                            qtyBox.textContent = item.quantity;
+                            updateLocalStorage(cartData);
+                            updateCartTotals(cartData);
+                        });
+
+                        plusBtn.addEventListener('click', () => {
+                            item.quantity++;
+                            qtyBox.textContent = item.quantity;
+                            updateLocalStorage(cartData);
+                            updateCartTotals(cartData);
+                        });
+
+                        // Remove button
+                        removeBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            cartData.splice(index, 1);
+                            updateLocalStorage(cartData);
+                            renderCart(); // re-render updates all indexes
+                        });
+                    });
+
+                    updateCartTotals(cartData);
+                }
+
+                function updateCartTotals(cartData) {
+                    let subtotal = 0;
+                    cartData.forEach(item => subtotal += (item.price || 0) * item.quantity);
+                    document.getElementById('subtotal').textContent = `Rs ${subtotal.toLocaleString()}`;
+                }
+
+                function updateLocalStorage(cartData) {
+                    localStorage.setItem('cart', JSON.stringify(cartData));
+                }
+
+                // Checkout clears cart
+                document.getElementById('checkout-btn').addEventListener('click', () => {
+                    localStorage.removeItem('cart');
+                    renderCart();
+                    alert('Checkout complete. Cart cleared!');
+                });
+
+                // Initial render
+                renderCart();
+            });
+        </script>
+
+         <script>
+        const searchIcon = document.getElementById('search-icon');
+        const searchWrapper = document.getElementById('search-bar-wrapper');
+        const searchOverlay = document.getElementById('search-overlay');
+        const searchInput = searchWrapper.querySelector('input');
+
+        searchIcon.addEventListener('click', () => {
+            searchWrapper.classList.toggle('active');
+            searchOverlay.classList.toggle('active');
+
+            if (searchWrapper.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.blur();
+            }
+        });
+
+        searchOverlay.addEventListener('click', () => {
+            searchWrapper.classList.remove('active');
+            searchOverlay.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchWrapper.classList.remove('active');
+                searchOverlay.classList.remove('active');
+            }
+        });
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cartCount');
+
+    const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+    if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.style.display = "inline-block"; // show badge
+    } else {
+        cartCount.style.display = "none"; // hide badge when cart is empty
+    }
+}
+
+updateCartCount();
+
+    </script>
+    <footer class="footer">
+
+        <!-- Top Icons Row -->
+        <div class="footer-icons">
+            <div class="icon-box">
+                <i class="bi bi-gift"></i>
+                <p>WORLDWIDE DELIVERY</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-arrow-repeat"></i>
+                <p>READ OUR RETURN & EXCHANGE POLICY</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-headset"></i>
+                <p>TOP-NOTCH SUPPORT</p>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-shield-lock"></i>
+                <p>SECURE PAYMENTS</p>
+            </div>
+        </div>
+
+
+        <div class="footer-main">
+
+            <!-- About Section -->
+            <div class="about">
+                <h3>About Us</h3>
+                <p>
+                    Madam Boutique is a modern fashion destination where elegance meets quality.
+                    We focus on premium fabrics, refined designs, and impeccable craftsmanship—because
+                    you deserve nothing less than perfection.
+                </p>
+                <!-- Social Media Icons -->
+                <div class="footer-social">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+
+            <!-- Store Policies -->
+            <div class="store-policies">
+                <h4>STORE POLICIES</h4>
+                <ul>
+                    <li><a href="aboutus.html">About us</a></li>
+                    <li><a href="contact_page_exact.html">Contact us</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return & Exchange</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="newsletter">
+                <h4>NEWSLETTER</h4>
+                <p>Subscribe to receive updates, access to exclusive deals, and more.</p>
+
+                <form>
+                    <input type="email" placeholder="E-mail" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+
+        </div>
+
+    </footer>
+                
+</body>
+
+</html>
